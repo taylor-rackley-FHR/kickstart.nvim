@@ -91,7 +91,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -166,6 +166,9 @@ vim.o.scrolloff = 10
 -- See `:help 'confirm'`
 vim.o.confirm = true
 
+-- set Powershell as the :terminal
+vim.o.shell = 'pwsh'
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -189,6 +192,11 @@ vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' }
 -- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
 -- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
 -- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
+
+-- vim.keymap.del('n', '<Up>') -- Unbind Up arrow in normal mode
+-- vim.keymap.del('n', '<Down>') -- Unbind Down arrow in normal mode
+-- vim.keymap.del('n', '<Left>') -- Unbind Left arrow in normal mode
+-- vim.keymap.del('n', '<Right>') -- Unbind Right arrow in normal mode
 
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
@@ -462,6 +470,19 @@ require('lazy').setup({
     end,
   },
 
+  -- LLM Plugins
+  {
+    -- Github Copilot
+    'github/copilot.vim',
+    config = function()
+      vim.g.copilot_enabled = false
+
+      -- Set the keymap for Copilot
+      vim.keymap.set('i', '<down>', '<Plug>(copilot-suggest)', { desc = 'Copilot Suggest' })
+      vim.keymap.set('i', '<right>', 'copilot#Accept("<CR>")', { silent = true, expr = true })
+    end,
+  },
+
   -- LSP Plugins
   {
     -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
@@ -672,8 +693,8 @@ require('lazy').setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         -- clangd = {},
-        -- gopls = {},
-        -- pyright = {},
+        gopls = {},
+        pyright = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -681,7 +702,7 @@ require('lazy').setup({
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`ts_ls`) will work just fine
-        -- ts_ls = {},
+        ts_ls = {},
         --
 
         lua_ls = {
